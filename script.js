@@ -35,6 +35,59 @@ const audioNote = document.querySelector("#audio-note");
 const demoHighlights = document.querySelector("#demo-highlights");
 const spotlightPoints = document.querySelectorAll(".spotlight-points span");
 const waveform = document.querySelector(".waveform");
+const audioToggle = document.querySelector("#audio-toggle");
+const audioProgress = document.querySelector("#audio-progress");
+const audioVolume = document.querySelector("#audio-volume");
+const audioTime = document.querySelector("#audio-time");
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) {
+    return "0:00";
+  }
+
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${String(secs).padStart(2, "0")}`;
+}
+
+function setRangeProgress(element, value, max) {
+  if (!element) {
+    return;
+  }
+
+  const safeMax = max > 0 ? max : 1;
+  const percent = `${(value / safeMax) * 100}%`;
+  element.style.setProperty("--range-progress", percent);
+}
+
+function updateAudioUI() {
+  if (!demoAudio) {
+    return;
+  }
+
+  const duration = Number.isFinite(demoAudio.duration) ? demoAudio.duration : 0;
+  const currentTime = Number.isFinite(demoAudio.currentTime) ? demoAudio.currentTime : 0;
+
+  if (audioTime) {
+    audioTime.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+  }
+
+  if (audioProgress) {
+    audioProgress.max = String(duration || 100);
+    audioProgress.value = String(currentTime);
+    setRangeProgress(audioProgress, currentTime, duration || 100);
+  }
+
+  if (audioVolume) {
+    setRangeProgress(audioVolume, demoAudio.volume, 1);
+  }
+
+  if (audioToggle) {
+    const isPlaying = !demoAudio.paused && !demoAudio.ended;
+    audioToggle.classList.toggle("is-playing", isPlaying);
+    audioToggle.setAttribute("aria-label", isPlaying ? "Pause audio" : "Play audio");
+  }
+}
 
 function renderHighlights(items) {
   demoHighlights.innerHTML = "";
@@ -64,10 +117,14 @@ function setActiveDemo(key) {
   if (waveform) {
     waveform.classList.remove("is-playing");
   }
+  if (audioToggle) {
+    audioToggle.classList.remove("is-playing");
+  }
   if (audioNote) {
     audioNote.innerHTML = `${demo.note.replace("assets/audio/", "<code>assets/audio/").replace(".mp3", ".mp3</code>")}`;
   }
   renderHighlights(demo.highlights);
+  updateAudioUI();
 }
 
 demoTabs.forEach((tab) => {
@@ -75,6 +132,7 @@ demoTabs.forEach((tab) => {
 });
 
 renderHighlights(demos.realestate.highlights);
+updateAudioUI();
 
 if (spotlightPoints.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let activeSpotlightIndex = 0;
@@ -96,15 +154,49 @@ if (spotlightPoints.length > 0 && !window.matchMedia("(prefers-reduced-motion: r
 if (demoAudio && waveform) {
   demoAudio.addEventListener("play", () => {
     waveform.classList.add("is-playing");
+    updateAudioUI();
   });
 
   const stopWaveform = () => {
     waveform.classList.remove("is-playing");
+    updateAudioUI();
   };
 
+  demoAudio.addEventListener("timeupdate", updateAudioUI);
+  demoAudio.addEventListener("loadedmetadata", updateAudioUI);
+  demoAudio.addEventListener("volumechange", updateAudioUI);
   demoAudio.addEventListener("pause", stopWaveform);
   demoAudio.addEventListener("ended", stopWaveform);
   demoAudio.addEventListener("emptied", stopWaveform);
+}
+
+if (audioToggle && demoAudio) {
+  audioToggle.addEventListener("click", async () => {
+    if (demoAudio.paused) {
+      try {
+        await demoAudio.play();
+      } catch {
+        updateAudioUI();
+      }
+    } else {
+      demoAudio.pause();
+    }
+  });
+}
+
+if (audioProgress && demoAudio) {
+  audioProgress.addEventListener("input", () => {
+    demoAudio.currentTime = Number(audioProgress.value);
+    setRangeProgress(audioProgress, Number(audioProgress.value), Number(audioProgress.max) || 100);
+    updateAudioUI();
+  });
+}
+
+if (audioVolume && demoAudio) {
+  audioVolume.addEventListener("input", () => {
+    demoAudio.volume = Number(audioVolume.value);
+    setRangeProgress(audioVolume, Number(audioVolume.value), 1);
+  });
 }
 
 const tiltCards = document.querySelectorAll(".tilt-card");

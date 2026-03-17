@@ -86,7 +86,7 @@
 
         <div class="hero-visual" aria-hidden="true">
           <!-- <div class="orb orb-one"></div> -->
-          <!-- <div class="orb orb-two"></div> -->
+          <div class="orb orb-two"></div>
           <div class="orb orb-three"></div>
 
           <article class="glass-card hero-explainer">
@@ -229,7 +229,44 @@
               <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
             </div>
 
-            <audio id="demo-audio" controls preload="none">
+            <div class="audio-shell">
+              <button class="audio-toggle" id="audio-toggle" type="button" aria-label="Play audio">
+                <span class="audio-toggle-icon audio-toggle-play"></span>
+              </button>
+
+              <div class="audio-track">
+                <div class="audio-track-meta">
+                  <span class="audio-track-label">Agent demo</span>
+                  <span class="audio-time" id="audio-time">0:00 / 0:00</span>
+                </div>
+                <input
+                  class="audio-progress"
+                  id="audio-progress"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="0"
+                  step="0.1"
+                  aria-label="Audio progress"
+                >
+              </div>
+
+              <!-- <label class="audio-volume-shell" aria-label="Volume">
+                <span class="audio-volume-icon"></span>
+                <input
+                  class="audio-volume"
+                  id="audio-volume"
+                  type="range"
+                  min="0"
+                  max="1"
+                  value="1"
+                  step="0.01"
+                  aria-label="Volume control"
+                >
+              </label> -->
+            </div>
+
+            <audio id="demo-audio" preload="none">
               <source id="demo-source" src="assets/audio/real-estate-demo.mp3" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
