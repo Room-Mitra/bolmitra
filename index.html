@@ -60,7 +60,7 @@
         <a href="#solutions">Solutions</a>
         <a href="#demos">Voice demos</a>
         <a href="#process">How it works</a>
-        <a href="#contact">Contact</a>
+        <a class="nav-contact" href="#contact">Contact</a>
       </nav>
     </header>
 
@@ -185,7 +185,7 @@
         <div class="spotlight-panel">
           <div>
             <p class="eyebrow">Current traction</p>
-            <h2>Pre-sales qualification for Bangalore real estate developers</h2>
+            <h2>Pre-sales qualification for real estate developers</h2>
           </div>
           <p>
             Our current focus is high-intent lead conversion. Bolmitra agents qualify prospects on project interest,
@@ -328,17 +328,41 @@
           <div>
             <p class="eyebrow">Contact</p>
             <h2>Start with one live workflow</h2>
-            <!-- <p>
-              Use this page as your launch pad. Replace the contact details below with your preferred CTA,
-              calendar link, or form endpoint before publishing.
-            </p> -->
+            <p>
+              Tell us about your team, call volume, and use case. We will route this directly into the RoomMitra leads API.
+            </p>
           </div>
 
-          <div class="contact-actions">
-            <a class="button button-primary" href="https://roommitra.com/contact-us" target="_blank" rel="noreferrer">Contact Us</a>
-            <a class="button button-secondary" href="mailto:hello@bolmitra.com">hello@bolmitra.com</a>
-            <a class="button button-secondary" href="https://roommitra.com/" target="_blank" rel="noreferrer">See RoomMitra</a>
-          </div>
+          <form class="lead-form" id="lead-form">
+            <div class="form-grid">
+              <label class="form-field">
+                <span>Name <em class="required-mark">*</em></span>
+                <input id="lead-name" name="name" type="text" autocomplete="name" required>
+              </label>
+              <label class="form-field">
+                <span>Email <em class="required-mark">*</em></span>
+                <input id="lead-email" name="email" type="email" autocomplete="email" required>
+              </label>
+              <label class="form-field">
+                <span>Phone number <em class="required-mark">*</em></span>
+                <input id="lead-phone" name="phone" type="tel" autocomplete="tel" required>
+              </label>
+              <label class="form-field">
+                <span>Company <em class="required-mark">*</em></span>
+                <input id="lead-company" name="company" type="text" autocomplete="organization" required>
+              </label>
+              <label class="form-field form-field-full">
+                <span>Message</span>
+                <textarea id="lead-message" name="message" rows="5"></textarea>
+              </label>
+              <input id="lead-hp" name="hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+            </div>
+
+            <div class="form-actions">
+              <button class="button button-primary" id="lead-submit" type="submit">Submit enquiry</button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </div>
+          </form>
         </div>
       </section>
     </main>

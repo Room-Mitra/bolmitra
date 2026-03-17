@@ -33,12 +33,14 @@ const demoSource = document.querySelector("#demo-source");
 const demoAudio = document.querySelector("#demo-audio");
 const audioNote = document.querySelector("#audio-note");
 const demoHighlights = document.querySelector("#demo-highlights");
-const spotlightPoints = document.querySelectorAll(".spotlight-points span");
 const waveform = document.querySelector(".waveform");
 const audioToggle = document.querySelector("#audio-toggle");
 const audioProgress = document.querySelector("#audio-progress");
 const audioVolume = document.querySelector("#audio-volume");
 const audioTime = document.querySelector("#audio-time");
+const leadForm = document.querySelector("#lead-form");
+const leadSubmit = document.querySelector("#lead-submit");
+const formStatus = document.querySelector("#form-status");
 
 function formatTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) {
@@ -134,23 +136,6 @@ demoTabs.forEach((tab) => {
 renderHighlights(demos.realestate.highlights);
 updateAudioUI();
 
-if (spotlightPoints.length > 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  let activeSpotlightIndex = 0;
-
-  function setActiveSpotlight(index) {
-    spotlightPoints.forEach((point, pointIndex) => {
-      point.classList.toggle("is-active", pointIndex === index);
-    });
-  }
-
-  setActiveSpotlight(activeSpotlightIndex);
-
-  window.setInterval(() => {
-    activeSpotlightIndex = (activeSpotlightIndex + 1) % spotlightPoints.length;
-    setActiveSpotlight(activeSpotlightIndex);
-  }, 2200);
-}
-
 if (demoAudio && waveform) {
   demoAudio.addEventListener("play", () => {
     waveform.classList.add("is-playing");
@@ -196,6 +181,64 @@ if (audioVolume && demoAudio) {
   audioVolume.addEventListener("input", () => {
     demoAudio.volume = Number(audioVolume.value);
     setRangeProgress(audioVolume, Number(audioVolume.value), 1);
+  });
+}
+
+if (leadForm && leadSubmit && formStatus) {
+  leadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(leadForm);
+    const payload = {
+      name: String(formData.get("name") || ""),
+      email: String(formData.get("email") || ""),
+      phone: String(formData.get("phone") || ""),
+      hotel: String(formData.get("company") || ""),
+      message: String(formData.get("message") || ""),
+      plan: "",
+      monthlySalary: "",
+      staffCount: "",
+      automationPercent: "",
+      dailyRoomRevenue: "",
+      upsellPercent: "",
+      market: "",
+      hp: String(formData.get("hp") || "")
+    };
+
+    if (payload.hp) {
+      formStatus.textContent = "Submission blocked.";
+      formStatus.className = "form-status is-error";
+      return;
+    }
+
+    leadSubmit.disabled = true;
+    leadSubmit.textContent = "Submitting...";
+    formStatus.textContent = "Sending your details...";
+    formStatus.className = "form-status";
+
+    try {
+      const response = await fetch("https://roommitra.com/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with ${response.status}`);
+      }
+
+      leadForm.reset();
+      formStatus.textContent = "Thanks. Your enquiry has been submitted.";
+      formStatus.className = "form-status is-success";
+    } catch {
+      formStatus.textContent = "Submission failed. Please try again.";
+      formStatus.className = "form-status is-error";
+    } finally {
+      leadSubmit.disabled = false;
+      leadSubmit.textContent = "Submit enquiry";
+    }
   });
 }
 
