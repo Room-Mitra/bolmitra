@@ -184,16 +184,6 @@ code {
   background: rgba(255, 255, 255, 0.04);
 }
 
-.hero-metrics {
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem;
-}
-
-.hero-metrics li,
 .glass-card,
 .solution-card,
 .industry-card,
@@ -205,27 +195,10 @@ code {
   box-shadow: var(--shadow);
 }
 
-.hero-metrics li {
-  padding: 1rem;
-  border-radius: 20px;
-}
-
-.hero-metrics strong {
-  display: block;
-  font-size: 1.1rem;
-  margin-bottom: 0.4rem;
-}
-
-.hero-metrics span {
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
-
 .hero-visual {
   position: relative;
   min-height: 620px;
-  margin-top: -1rem;
+  margin-top: -1.75rem;
   padding-top: 0.5rem;
 }
 
@@ -341,6 +314,8 @@ code {
   display: block;
   font-size: 1.1rem;
   line-height: 1.3;
+  position: relative;
+  z-index: 1;
 }
 
 .benefit-block {
@@ -391,6 +366,17 @@ code {
 .benefit-block p {
   margin: 0.65rem 0 0;
   font-size: 0.95rem;
+  position: relative;
+  z-index: 1;
+}
+
+.benefit-metric strong {
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+}
+
+.benefit-metric p {
+  font-size: 0.92rem;
 }
 
 .hero-comparison {
@@ -632,28 +618,28 @@ code {
   opacity: 0.65;
 }
 
-.waveform span:nth-child(1) { height: 22%; }
-.waveform span:nth-child(2) { height: 46%; }
-.waveform span:nth-child(3) { height: 34%; }
-.waveform span:nth-child(4) { height: 58%; }
-.waveform span:nth-child(5) { height: 28%; }
-.waveform span:nth-child(6) { height: 48%; }
-.waveform span:nth-child(7) { height: 36%; }
-.waveform span:nth-child(8) { height: 24%; }
+.waveform span:nth-child(1) { height: 18%; }
+.waveform span:nth-child(2) { height: 30%; }
+.waveform span:nth-child(3) { height: 42%; }
+.waveform span:nth-child(4) { height: 56%; }
+.waveform span:nth-child(5) { height: 56%; }
+.waveform span:nth-child(6) { height: 42%; }
+.waveform span:nth-child(7) { height: 30%; }
+.waveform span:nth-child(8) { height: 18%; }
 
 .waveform.is-playing span {
-  animation: waveformDance 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: waveformRipple 1.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   opacity: 1;
 }
 
-.waveform.is-playing span:nth-child(1) { animation-delay: 0s; }
-.waveform.is-playing span:nth-child(2) { animation-delay: 0.12s; }
-.waveform.is-playing span:nth-child(3) { animation-delay: 0.28s; }
-.waveform.is-playing span:nth-child(4) { animation-delay: 0.42s; }
-.waveform.is-playing span:nth-child(5) { animation-delay: 0.18s; }
-.waveform.is-playing span:nth-child(6) { animation-delay: 0.54s; }
-.waveform.is-playing span:nth-child(7) { animation-delay: 0.68s; }
-.waveform.is-playing span:nth-child(8) { animation-delay: 0.08s; }
+.waveform.is-playing span:nth-child(1) { animation-delay: 0.44s; }
+.waveform.is-playing span:nth-child(2) { animation-delay: 0.3s; }
+.waveform.is-playing span:nth-child(3) { animation-delay: 0.16s; }
+.waveform.is-playing span:nth-child(4) { animation-delay: 0s; }
+.waveform.is-playing span:nth-child(5) { animation-delay: 0.08s; }
+.waveform.is-playing span:nth-child(6) { animation-delay: 0.22s; }
+.waveform.is-playing span:nth-child(7) { animation-delay: 0.36s; }
+.waveform.is-playing span:nth-child(8) { animation-delay: 0.5s; }
 
 audio {
   width: 100%;
@@ -715,22 +701,22 @@ audio {
   }
 }
 
-@keyframes waveformDance {
+@keyframes waveformRipple {
   0%, 100% {
-    transform: scaleY(0.38);
-    opacity: 0.45;
+    transform: scaleY(0.55);
+    opacity: 0.42;
   }
-  20% {
-    transform: scaleY(0.92);
-    opacity: 0.8;
-  }
-  45% {
-    transform: scaleY(1.18);
+  22% {
+    transform: scaleY(1.28);
     opacity: 1;
   }
-  70% {
-    transform: scaleY(0.62);
-    opacity: 0.65;
+  48% {
+    transform: scaleY(0.78);
+    opacity: 0.72;
+  }
+  72% {
+    transform: scaleY(1.04);
+    opacity: 0.86;
   }
 }
 
@@ -751,7 +737,6 @@ audio {
     min-height: auto;
   }
 
-  .hero-metrics,
   .hero-benefits,
   .hero-comparison {
     grid-template-columns: 1fr;
